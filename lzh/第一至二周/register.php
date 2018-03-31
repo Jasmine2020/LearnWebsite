@@ -33,7 +33,7 @@
                 </tr>
                 <tr>
                     <td align="right">邮箱：</td>
-                    <td><input type="text" name="email" value="请输入正确的邮箱地址" maxLength="6"/></td>
+                    <td><input type="text" name="email" value="请输入正确的邮箱地址" maxLength="20"/></td>
                 </tr>
                 <tr>
                     <td colspa="2" align="right"><input type="Submit" name="Submit" value="注册"/></td>

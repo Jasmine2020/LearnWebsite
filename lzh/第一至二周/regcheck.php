@@ -6,13 +6,17 @@
     $psw = $_POST["userpwd"];
     $psw_confirm = $_POST["confirm"];
     $email = $_POST["email"];
+    $token = md5($user.$psw);
+    echo $token;
+
     if($user == "" || $psw == "" || $psw_confirm == ""||$email == "")
     {
         echo "<script>alert('请确认信息完整性！'); history.go(-1);</script>";
     }
     else
     {
-    if($psw == $psw_confirm)
+
+                if($psw == $psw_confirm)
     {
         //建立连接
         $conn = mysqli_connect("localhost","root","root"); //连接数据库,帐号密码为自己数据库的帐号密码
@@ -44,7 +48,27 @@
             $result = mysqli_query($conn,$sql_insert);
             if($result)
             {
-                echo "<script>alert('注册成功！'); history.go(-1);</script>";
+                include("Smtp.class.php");
+                $smtpserver = "smtp.qq.com";//SMTP服务器
+                $smtpserverport =25;//SMTP服务器端口
+                $smtpusermail = "271329508@qq.com";//SMTP服务器的用户邮箱
+                $smtpemailto ="13051229898@163.com";//发送给谁(可以填写任何邮箱地址)
+                $smtpuser = "271329508@qq.com";//SMTP服务器的用户帐号(即SMTP服务器的用户邮箱@前面的信息)
+                $smtppass = "lzhlz980511";//SMTP服务器的用户密码
+                $mailtitle = 'test';//邮件主题
+                $mailcontent = "<h1>您成功发送了一条电子邮件</h1>";//邮件内容
+                $mailtype = "HTML";//邮件格式（HTML/TXT）,TXT为文本邮件
+
+                $smtp = new smtp($smtpserver,$smtpserverport,true,$smtpuser,$smtppass);//这里面的一个true是表示使用身份验证,否则不使用身份验证.
+                $smtp->debug = false;//是否显示发送的调试信息
+                $state = $smtp->sendmail($smtpemailto, $smtpusermail, $mailtitle, $mailcontent, $mailtype);
+
+                if($state==""){
+                    echo "对不起，邮件发送失败！请检查邮箱填写是否有误。";
+                    exit();
+                }
+
+                echo "<script>alert('注册成功！请查收邮件'); history.go(-1);</script>";
                 mysqli_close($conn);
             }
             else
@@ -57,6 +81,7 @@
     {
         echo "<script>alert('密码不一致！'); history.go(-1);</script>";
     }
+        
     }
  }
  else
