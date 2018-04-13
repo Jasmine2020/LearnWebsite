@@ -7,7 +7,6 @@
     $psw_confirm = $_POST["confirm"];
     $email = $_POST["email"];
     $token = md5($user.$psw);
-    echo $token;
 
     if($user == "" || $psw == "" || $psw_confirm == ""||$email == "")
     {
@@ -49,14 +48,16 @@
             if($result)
             {
                 include("Smtp.class.php");
+
+}
                 $smtpserver = "smtp.qq.com";//SMTP服务器
-                $smtpserverport =25;//SMTP服务器端口
+                $smtpserverport = 465;//SMTP服务器端口
                 $smtpusermail = "271329508@qq.com";//SMTP服务器的用户邮箱
-                $smtpemailto ="13051229898@163.com";//发送给谁(可以填写任何邮箱地址)
+                $smtpemailto =$email;//发送给谁(可以填写任何邮箱地址)
                 $smtpuser = "271329508@qq.com";//SMTP服务器的用户帐号(即SMTP服务器的用户邮箱@前面的信息)
                 $smtppass = "lzhlz980511";//SMTP服务器的用户密码
-                $mailtitle = 'test';//邮件主题
-                $mailcontent = "<h1>您成功发送了一条电子邮件</h1>";//邮件内容
+                $mailtitle = "用户账号激活";//邮件主题
+                $mailcontent = "亲爱的" . $username . "：<br/>感谢您在我站注册了新帐号。<br/>请点击链接激活您的帐号。<br/><a href='http://localhost/actice.php?verify=" . $token . "' target='_blank'>http://localhost/active.php?verify=" . $token . "</a><br/>如果以上链接无法点击，请将它复制到你的浏览器地址栏中进入访问."//邮件内容
                 $mailtype = "HTML";//邮件格式（HTML/TXT）,TXT为文本邮件
 
                 $smtp = new smtp($smtpserver,$smtpserverport,true,$smtpuser,$smtppass);//这里面的一个true是表示使用身份验证,否则不使用身份验证.
